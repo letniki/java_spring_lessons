@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Spring Demo for Okten
+  profiles:
+    active: store1
