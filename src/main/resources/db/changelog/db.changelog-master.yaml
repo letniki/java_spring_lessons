@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1.0.1"
+      author: "eokten"
+      changes:
+        - createSequence:
+            sequenceName: "products_seq"
+        - createTable:
+            tableName: "products"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigint"
+                  constraints:
+                    primaryKey: true
+                  defaultValueSequenceNext: "products_seq"
+              - column:
+                  name: "name"
+                  type: "text"
+              - column:
+                  name: "price"
+                  type: "numeric"
+              - column:
+                  name: "availability"
+                  type: "varchar(50)"
+  - changeSet:
+      id: "1.0.2"
+      author: "eokten"
+      changes:
+        - addColumn:
+            tableName: "products"
+            columns:
+              - column:
+                  name: "temp_availability"
+                  type: "smallint"
+        - sqlFile:
+            path: "classpath:/db/changelog/changes/update-availability-values.sql"
+        - dropColumn:
+            columnName: "availability"
+            tableName: "products"
+        - renameColumn:
+            oldColumnName: "temp_availability"
+            newColumnName: "availability"
+            tableName: "products"
