@@ -2,8 +2,11 @@ package org.okten.springdemo.controller;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.okten.springdemo.dto.ReviewDTO;
 import org.okten.springdemo.entity.Product;
+import org.okten.springdemo.entity.Review;
 import org.okten.springdemo.repository.ProductRepository;
+import org.okten.springdemo.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +25,11 @@ public class ProductController {
 
     private final ProductRepository productRepository;
 
+    private final ProductService productService;
+
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        return ResponseEntity.of(productRepository.findById(id));
+        return ResponseEntity.of(this.productRepository.findById(id));
     }
 
     @GetMapping("/products")
@@ -34,26 +39,26 @@ public class ProductController {
     ) {
 
         if (minPrice != null && maxPrice != null) {
-            return ResponseEntity.ok(productRepository.findAllByPriceBetween(minPrice, maxPrice));
+            return ResponseEntity.ok(this.productRepository.findAllByPriceBetween(minPrice, maxPrice));
         } else if (minPrice != null) {
-            return ResponseEntity.ok(productRepository.findAllByPriceGreaterThan(minPrice));
+            return ResponseEntity.ok(this.productRepository.findAllByPriceGreaterThan(minPrice));
         } else if (maxPrice != null) {
-            return ResponseEntity.ok(productRepository.findAllByPriceLessThan(maxPrice));
+            return ResponseEntity.ok(this.productRepository.findAllByPriceLessThan(maxPrice));
         } else {
-            return ResponseEntity.ok(productRepository.findAll());
+            return ResponseEntity.ok(this.productRepository.findAll());
         }
     }
 
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(productRepository.save(product));
+        return ResponseEntity.ok(this.productRepository.save(product));
     }
 
     @Transactional
     @PutMapping("/products/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable(name = "id") Long productId, @RequestBody Product product) {
         return ResponseEntity.of(
-                productRepository
+                this.productRepository
                         .findById(productId)
                         .map(oldProduct -> {
                             oldProduct.setName(product.getName());
@@ -67,7 +72,17 @@ public class ProductController {
 
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable(name = "id") Long productId) {
-        productRepository.deleteById(productId);
+        this.productRepository.deleteById(productId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/products/{id}/reviews")
+    public ResponseEntity<ReviewDTO> createReview(@PathVariable(name = "id") Long productId, @RequestBody ReviewDTO reviewDTO) {
+        return ResponseEntity.ok(this.productService.createReview(productId, reviewDTO));
+    }
+
+    @GetMapping("/products/{id}/reviews")
+    public ResponseEntity<List<ReviewDTO>> getReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(this.productService.findAllReviewsForProduct(id));
     }
 }
