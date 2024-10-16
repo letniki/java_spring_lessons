@@ -85,7 +85,7 @@ public class ProductService {
 	@Transactional
 	public Optional<ProductDto> updateProduct(Long productId, ProductDto productDtoUpdateWith) {
 		return productRepository.findById(productId)
-				.map(existingProduct -> productMapper.updateEntity(existingProduct, productDtoUpdateWith))
+				.map(existingProduct -> productMapper.updateEntityPartially(existingProduct, productDtoUpdateWith))
 				.map(productMapper::mapToDto);
 	}
 
