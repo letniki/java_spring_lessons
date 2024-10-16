@@ -1,3 +1,13 @@
+# Генерація коду по OpenAPI специфікації
+
+Перед запуском апки треба заранити наступну команду в терміналі:
+
+```shell
+mvn clean compile
+```
+
+Також її слід запускати кожен раз коли міняєте щось в специфікації (в даному репозиторії це '[product-service.openapi.yaml](src/main/resources/spec/product-service.openapi.yaml)')
+
 # OAuth2 авторизація
 
 Тут описано, як виконати авторизацію за допомогою Authorization Code Grant з PKCE для отримання `access_token`. Процес включає два основні кроки:
