@@ -4,9 +4,9 @@ spring:
   profiles:
     active: store1
   datasource:
-    url: "jdbc:postgresql://localhost:5432/XXX"
-    username: "postgres"
-    password: "postgres"
+    url: "jdbc:mysql://localhost:3306/table"
+    username: "root"
+    password: "12345678"
   jpa:
     show-sql: true
     hibernate:
@@ -16,7 +16,7 @@ spring:
         format_sql: true
   data:
     mongodb:
-      uri: mongodb+srv://root:root@cluster0.m7dnzbv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri: mongodb+srv://letniki:admin@cluster0.y379y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: products-db
   mail:
     host: smtp.gmail.com
@@ -33,7 +33,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://dev-d8rm3bg4cwywnjin.eu.auth0.com/
+          issuer-uri: https://dev-3ye8hk3rxi1gafds.us.auth0.com/
 logging:
   level:
     sun:

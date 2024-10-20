@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: "1.0.1"
-      author: "eokten"
+      id: "1.0.5"
+      author: "letniki"
       changes:
         - createSequence:
             sequenceName: "products_seq"
@@ -13,7 +13,8 @@ databaseChangeLog:
                   type: "bigint"
                   constraints:
                     primaryKey: true
-                  defaultValueSequenceNext: "products_seq"
+                    nullable: false
+                  autoIncrement: true
               - column:
                   name: "name"
                   type: "text"
@@ -24,8 +25,8 @@ databaseChangeLog:
                   name: "availability"
                   type: "varchar(50)"
   - changeSet:
-      id: "1.0.2"
-      author: "eokten"
+      id: "1.0.6"
+      author: "letniki"
       changes:
         - addColumn:
             tableName: "products"
@@ -42,12 +43,11 @@ databaseChangeLog:
             oldColumnName: "temp_availability"
             newColumnName: "availability"
             tableName: "products"
+            columnDataType: "smallint"
   - changeSet:
-      id: "1.0.3"
-      author: "eokten"
+      id: "1.0.7"
+      author: "letniki"
       changes:
-        - createSequence:
-            sequenceName: "orders_seq"
         - createTable:
             tableName: "orders"
             columns:
@@ -56,8 +56,8 @@ databaseChangeLog:
                   type: "bigint"
                   constraints:
                     primaryKey: true
-                    unique: true
-                  defaultValueSequenceNext: "orders_seq"
+                    nullable: false
+                  autoIncrement: true
         - createTable:
             tableName: "order_items"
             columns:
