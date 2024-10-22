@@ -29,6 +29,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  kafka:
+    producer:
+      topic: product-deleted-events
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   security:
     oauth2:
       resourceserver:

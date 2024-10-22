@@ -3,6 +3,7 @@ package org.okten.springdemo.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.okten.springdemo.api.dto.ProductDto;
+import org.okten.springdemo.dto.ProductDeletedEvent;
 import org.okten.springdemo.dto.ReviewDTO;
 import org.okten.springdemo.entity.Product;
 import org.okten.springdemo.entity.Review;
@@ -24,6 +25,7 @@ public class ProductService {
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper reviewMapper;
 	private final ProductMapper productMapper;
+	private final ProductEventsProducer productEventsProducer;
 
 	public ReviewDTO createReview(Long productId, ReviewDTO reviewDTO) {
 		if (!this.productRepository.existsById(productId)) {
@@ -62,13 +64,17 @@ public class ProductService {
 
 		return this.productMapper.mapToDto(savedProduct);
 	}
-
+	@Transactional
 	public void deleteProduct(Long productId) {
 		if (!this.productRepository.existsById(productId)) {
 			throw new IllegalArgumentException("Product with id " + productId + " does not exist");
 		}
 
 		this.productRepository.deleteById(productId);
+
+		productEventsProducer.produce(ProductDeletedEvent.builder()
+				.productId(productId)
+				.build());
 	}
 
 	public Optional<ProductDto> findProduct(Long productId) {
