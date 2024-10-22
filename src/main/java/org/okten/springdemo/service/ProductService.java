@@ -45,7 +45,6 @@ public class ProductService {
 				.map(this.reviewMapper::mapToDto)
 				.toList();
 	}
-
 	public List<ReviewDTO> getLatestReviews(LocalDateTime startDateTime) {
 		return this.reviewRepository
 				.findAllByTimestampAfter(startDateTime)
