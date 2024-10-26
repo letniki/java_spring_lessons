@@ -1,0 +1,68 @@
+asyncapi: 3.0.0
+info:
+  title: Product Service Event API
+  version: 1.0.0
+  description: |-
+    The API allows to interact with product events
+
+defaultContentType: application/json
+servers:
+  dev:
+    host: localhost:9092
+    protocol: kafka
+    description: Development Kafka broker
+channels:
+  productDeletedEvents:
+    address: product-deleted-events
+    messages:
+      ProductDeleted:
+        $ref: '#/components/messages/ProductDeleted'
+    description: The topic on which product deleted events may be produced and consumed.
+operations:
+  productDeleted:
+    action: send
+    tags:
+      - name: Product
+    channel:
+      $ref: '#/channels/productDeletedEvents'
+    summary: Produce product deleted event
+    traits:
+      - $ref: '#/components/operationTraits/kafka'
+    messages:
+      - $ref: '#/channels/productDeletedEvents/messages/ProductDeleted'
+components:
+  messages:
+    ProductDeleted:
+      name: ProductDeleted
+      title: Product deleted message
+      summary: Contains data about product that was deleted
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/commonHeaders'
+      payload:
+        $ref: '#/components/schemas/ProductDeletedPayload'
+  schemas:
+    ProductDeletedPayload:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product id
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          dummy-header:
+            type: integer
+            minimum: 0
+            maximum: 100
+  operationTraits:
+    kafka:
+      bindings:
+        kafka:
+          clientId:
+            type: string
+            enum:
+              - dummy-id

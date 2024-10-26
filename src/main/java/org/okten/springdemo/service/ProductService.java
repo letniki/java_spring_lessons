@@ -25,7 +25,7 @@ public class ProductService {
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper reviewMapper;
 	private final ProductMapper productMapper;
-	private final ProductEventsProducer productEventsProducer;
+	private final ProductEventsProducerImpl productEventsProducerImpl;
 
 	public ReviewDTO createReview(Long productId, ReviewDTO reviewDTO) {
 		if (!this.productRepository.existsById(productId)) {
@@ -71,7 +71,7 @@ public class ProductService {
 
 		this.productRepository.deleteById(productId);
 
-		productEventsProducer.produce(ProductDeletedEvent.builder()
+		productEventsProducerImpl.produce(ProductDeletedEvent.builder()
 				.productId(productId)
 				.build());
 	}
